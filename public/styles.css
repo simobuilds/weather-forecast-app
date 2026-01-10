@@ -151,3 +151,21 @@ body {
     padding: 8px 15px;
   }
 }
+.search-history {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.badge {
+  padding: 8px 15px;
+  font-weight: 400;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+.badge:hover {
+  opacity: 1;
+}
