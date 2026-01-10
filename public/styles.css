@@ -169,3 +169,13 @@ body {
 .badge:hover {
   opacity: 1;
 }
+.search-history a:hover {
+  color: #ff4d4d !important; /* Turns red when hovering */
+  transition: color 0.3s ease;
+}
+
+.search-history .badge:hover {
+  background-color: #e0e0e0 !important;
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}
