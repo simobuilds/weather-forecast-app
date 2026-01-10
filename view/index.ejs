@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+      <meta charset="utf-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1">
+              <title>Weather Forecast App</title>
+                  <!-- Bootstrap 5 CDN -->
+                      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+                          <!-- Font Awesome CDN -->
+                              <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+                                  <!-- Google Fonts -->
+                                      <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+                                          <!-- Custom CSS -->
+                                              <link rel="stylesheet" href="public/styles.css">
+                                                </head>
+                                                  <body>
+                                                      <div class="weather-app-container">
+                                                            <div class="weather-card">
+                                                                    <div class="weather-header">
+                                                                              <h1><i class="fas fa-cloud-sun"></i> Weather Forecast</h1>
+                                                                                        <p class="tagline">Get real-time weather updates for any city</p>
+                                                                                                </div>
+                                                                                                        
+                                                                                                                <form class="weather-form" action="/" method="post">
+                                                                                                                          <div class="input-group">
+                                                                                                                                      <span class="input-group-text"><i class="fas fa-search-location"></i></span>
+                                                                                                                                                  <input id="cityInput" type="text" name="cityName" class="form-control" placeholder="Enter city name..." aria-label="City Name">
+                                                                                                                                                              <button type="submit" class="btn btn-primary">
+                                                                                                                                                                            <i class="fas fa-cloud-sun-rain"></i> Get Weather
+                                                                                                                                                                                        </button>
+                                                                                                                                                                                                  </div>
+                                                                                                                                                                                                          </form>
+                                                                                                                                                                                                                  
+                                                                                                                                                                                                                          <div class="weather-display">
+  <% if (weather === null) { %>
+    <div class="text-center py-5">
+      <i class="fas fa-city weather-icon-placeholder"></i>
+      <p class="mt-3">Enter a city name to see the weather forecast</p>
+    </div>
+  <% } else if (weather === "error") { %>
+    <div class="text-center py-5">
+      <i class="fas fa-exclamation-triangle text-danger"></i>
+      <p class="mt-3 text-danger">City not found. Please try again.</p>
+    </div>
+  <% } else { %>
+    <div class="text-center py-5">
+      <h2><%= query %></h2>
+      <img src="<%= imgUrl %>" alt="weather icon">
+      <h3 class="display-4"><%= Math.round(weather.main.temp) %>°C</h3>
+      <p class="text-capitalize"><%= weather.weather[0].description %></p>
+      <div class="row mt-3">
+        <div class="col">
+          <p><strong>Humidity</strong><br><%= weather.main.humidity %>%</p>
+        </div>
+        <div class="col">
+          <p><strong>Wind</strong><br><%= weather.wind.speed %> m/s</p>
+        </div>
+      </div>
+    </div>
+  <% } %>
+</div>
+                                                                                                                                                                                                                                                                                        </div>
+                                                                                                                                                                                                                                                                                                
+                                                                                                                                                                                                                                                                                                        <div class="weather-footer">
+                                                                                                                                                                                                                                                                                                                  <p><i class="fas fa-info-circle"></i> Powered by OpenWeatherMap</p>
+                                                                                                                                                                                                                                                                                                                          </div>
+                                                                                                                                                                                                                                                                                                                                </div>
+                                                                                                                                                                                                                                                                                                                                    </div>
+
+                                                                                                                                                                                                                                                                                                                                        <!-- Bootstrap JS Bundle with Popper -->
+                                                                                                                                                                                                                                                                                                                                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                                                                                                                                                                                                                                                                                                                                              </body>
+                                                                                                                                                                                                                                                                                                                                              </html>
