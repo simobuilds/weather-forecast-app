@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Weather Forecast App</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <div class="weather-app-container">
+        <div class="weather-card">
+            <div class="weather-header">
+                <h1><i class="fas fa-cloud-sun"></i> Weather Forecast</h1>
+                <p class="tagline">Get real-time weather updates for any city</p>
+            </div>
+
+            <form class="weather-form" action="/" method="post">
+                <div class="input-group">
+                    <span class="input-group-text"><i class="fas fa-search-location"></i></span>
+                    <input id="cityInput" type="text" name="cityName" class="form-control" placeholder="Enter city name..." aria-label="City Name" required>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-cloud-sun-rain"></i> Get Weather
+                    </button>
+                </div>
+            </form>
+
+            <% if (history && history.length > 0) { %>
+<div class="search-history mt-2 mb-4 text-center">
+    <div class="d-flex justify-content-center align-items-center gap-2">
+        <small class="text-white-50">Recent: </small>
+        <% history.forEach(city => { %>
+        <span class="badge rounded-pill bg-light text-dark mx-1" 
+              style="cursor: pointer;" 
+              onclick="submitHistory('<%= city %>')">
+            <%= city %>
+        </span>
+        <% }) %>
+        <a href="/clear-history" class="text-white-50 ms-2" style="text-decoration: none; font-size: 0.8rem;">
+            <i class="fas fa-trash-alt"></i> Clear
+        </a>
+    </div>
+</div>
+<% } %>
+
+            <div class="container mt-4">
+  <div class="row justify-content-center g-4">
+    <% if (cards.length === 0) { %>
+      <p class="text-center">Search for a city to start comparing!</p>
+    <% } %>
+
+    <% cards.forEach(city => { %>
+      <div class="col-12 col-md-4">
+        <div class="weather-card h-100">
+          <div class="text-center">
+            <h4 class="text-capitalize"><%= city.name %></h4>
+            <img src="<%= city.img %>" alt="icon">
+            <h2 class="display-6"><%= Math.round(city.data.main.temp) %>°C</h2>
+            <p class="text-muted"><%= city.data.weather[0].description %></p>
+            <hr>
+            <div class="row small">
+                <div class="col">Hum: <%= city.data.main.humidity %>%</div>
+                <div class="col">Wind: <%= city.data.wind.speed %>m/s</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    <% }) %>
+  </div>
+</div>
+
+            <div class="weather-footer">
+                <p><i class="fas fa-info-circle"></i> Powered by OpenWeatherMap</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function submitHistory(cityName) {
+            const input = document.getElementById('cityInput');
+            input.value = cityName;
+            const form = document.querySelector('.weather-form');
+            form.submit();
+        }
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

@@ -1,0 +1,199 @@
+/* Google Fonts */
+body {
+  font-family: 'Poppins', 'Open Sans', sans-serif;
+  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
+    url('https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2060&q=80') no-repeat center center fixed;
+  background-size: cover;
+  min-height: 100vh;
+  margin: 0;
+  padding: 20px;
+  color: #fff;
+}
+
+.weather-app-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 90vh;
+}
+
+/* --- Modified Section --- */
+.weather-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  padding: 30px;
+  
+  /* Use 90% for mobile as default */
+  width: 90%; 
+  max-width: 500px; /* Small limit for mobile/tablets */
+  
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+/* --- Add this for Desktop (Screens wider than 992px) --- */
+@media (min-width: 992px) {
+ /* Change your existing .weather-card to this */
+.weather-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  width: 100%; /* Let the column define the width */
+}
+
+.weather-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Container for the whole app */
+.weather-app-container {
+  padding: 40px 20px;
+  width: 100%;
+}
+}
+.weather-header {
+  text-align: center;
+  margin-bottom: 25px;
+  display: flex;
+  flex-direction: column;
+  align-items: center; /* Centers items horizontally */
+  justify-content: center;
+}
+
+.weather-header h1 {
+  font-weight: 600;
+  color: #fff;
+  margin-bottom: 5px;
+  font-size: 2.2rem;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.weather-header h1 i {
+  color: #fff;
+  margin-right: 10px;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+.tagline {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.9rem;
+}
+
+.weather-form {
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: center; /* Centers the form inside the card */
+}
+
+.weather-form .input-group {
+  width: 100%;
+  max-width: 600px; /* Limits the search bar width on desktop */
+  margin: 0 auto;   /* Extra insurance for centering */
+}
+
+.form-control {
+  background-color: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  padding: 12px 15px;
+  font-size: 1rem;
+  color: #fff;
+}
+
+.form-control::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.form-control:focus {
+  background-color: rgba(255, 255, 255, 0.3);
+  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
+  border-color: rgba(255, 255, 255, 0.4);
+  color: #fff;
+}
+
+.btn-primary {
+  background-color: rgba(255, 255, 255, 0.3);
+  border: none;
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  color: #fff;
+}
+
+.btn-primary:hover {
+  background-color: rgba(255, 255, 255, 0.4);
+  transform: translateY(-2px);
+}
+
+.weather-display {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 15px;
+  padding: 20px;
+  min-height: 200px;
+  margin-bottom: 20px;
+  transition: all 0.5s ease;
+  color: #fff;
+}
+
+.weather-icon-placeholder {
+  font-size: 3rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.weather-footer {
+  text-align: center;
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+.weather-footer i {
+  margin-right: 5px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 576px) {
+  .weather-card {
+    padding: 20px;
+  }
+  
+  .weather-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .btn-primary {
+    padding: 8px 15px;
+  }
+}
+.search-history {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.badge {
+  padding: 8px 15px;
+  font-weight: 400;
+  opacity: 0.8;
+  transition: opacity 0.3s;
+}
+
+.badge:hover {
+  opacity: 1;
+}
+.search-history a:hover {
+  color: #ff4d4d !important; /* Turns red when hovering */
+  transition: color 0.3s ease;
+}
+
+.search-history .badge:hover {
+  background-color: #e0e0e0 !important;
+  transform: translateY(-1px);
+  transition: all 0.2s ease;
+}

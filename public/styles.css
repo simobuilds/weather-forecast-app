@@ -1,8 +1,8 @@
-/* Google Fonts */
+/* --- Global Styles --- */
 body {
   font-family: 'Poppins', 'Open Sans', sans-serif;
-  background: linear-gradient(rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0.2)),
-    url('https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2060&q=80') no-repeat center center fixed;
+  background: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.4)),
+    url('https://images.unsplash.com/photo-1504608524841-42fe6f032b4b?auto=format&fit=crop&w=2060&q=80') no-repeat center center fixed;
   background-size: cover;
   min-height: 100vh;
   margin: 0;
@@ -10,190 +10,119 @@ body {
   color: #fff;
 }
 
+/* --- Layout Container --- */
 .weather-app-container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  min-height: 90vh;
-}
-
-/* --- Modified Section --- */
-.weather-card {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-  padding: 30px;
-  
-  /* Use 90% for mobile as default */
-  width: 90%; 
-  max-width: 500px; /* Small limit for mobile/tablets */
-  
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* --- Add this for Desktop (Screens wider than 992px) --- */
-@media (min-width: 992px) {
- /* Change your existing .weather-card to this */
-.weather-card {
-  background: rgba(255, 255, 255, 0.15);
-  border-radius: 20px;
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  padding: 20px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-  transition: transform 0.3s ease;
-  width: 100%; /* Let the column define the width */
-}
-
-.weather-card:hover {
-  transform: translateY(-5px);
-  background: rgba(255, 255, 255, 0.2);
-}
-
-/* Container for the whole app */
-.weather-app-container {
-  padding: 40px 20px;
   width: 100%;
+  max-width: 1200px; /* Limits overall width on ultra-wide screens */
+  margin: 0 auto;
+  padding-top: 50px;
 }
-}
+
+/* --- Header Section --- */
 .weather-header {
   text-align: center;
-  margin-bottom: 25px;
-  display: flex;
-  flex-direction: column;
-  align-items: center; /* Centers items horizontally */
-  justify-content: center;
+  margin-bottom: 40px;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .weather-header h1 {
   font-weight: 600;
-  color: #fff;
-  margin-bottom: 5px;
-  font-size: 2.2rem;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.weather-header h1 i {
-  color: #fff;
-  margin-right: 10px;
-  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
+  font-size: 2.5rem;
+  margin-bottom: 10px;
 }
 
 .tagline {
-  color: rgba(255, 255, 255, 0.8);
-  font-size: 0.9rem;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1rem;
 }
 
+/* --- Form & Search Bar --- */
 .weather-form {
-  margin-bottom: 30px;
-  display: flex;
-  justify-content: center; /* Centers the form inside the card */
+  margin-bottom: 40px;
 }
 
 .weather-form .input-group {
-  width: 100%;
-  max-width: 600px; /* Limits the search bar width on desktop */
-  margin: 0 auto;   /* Extra insurance for centering */
+  max-width: 500px;
+  margin: 0 auto;
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  overflow: hidden;
 }
 
 .form-control {
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.2) !important;
   border: 1px solid rgba(255, 255, 255, 0.3);
-  padding: 12px 15px;
-  font-size: 1rem;
-  color: #fff;
+  color: #fff !important;
+  backdrop-filter: blur(5px);
 }
 
 .form-control::placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
 
-.form-control:focus {
-  background-color: rgba(255, 255, 255, 0.3);
-  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.25);
-  border-color: rgba(255, 255, 255, 0.4);
-  color: #fff;
-}
-
 .btn-primary {
   background-color: rgba(255, 255, 255, 0.3);
   border: none;
-  padding: 10px 20px;
   font-weight: 500;
   transition: all 0.3s ease;
-  color: #fff;
 }
 
 .btn-primary:hover {
-  background-color: rgba(255, 255, 255, 0.4);
-  transform: translateY(-2px);
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
-.weather-display {
+/* --- Individual Weather Cards (The Grid Items) --- */
+.weather-card {
   background: rgba(255, 255, 255, 0.15);
-  border-radius: 15px;
-  padding: 20px;
-  min-height: 200px;
-  margin-bottom: 20px;
-  transition: all 0.5s ease;
-  color: #fff;
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 25px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+  transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), background 0.3s ease;
+  height: 100%; /* Ensures all cards in a row have equal height */
 }
 
-.weather-icon-placeholder {
-  font-size: 3rem;
-  color: rgba(255, 255, 255, 0.7);
+.weather-card:hover {
+  transform: translateY(-10px);
+  background: rgba(255, 255, 255, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.weather-card h2, .weather-card h3 {
+  margin: 10px 0;
+}
+
+.weather-card hr {
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  margin: 20px 0;
+}
+
+/* --- History & Footer --- */
+.search-history a {
+  transition: all 0.3s ease;
+}
+
+.search-history a:hover {
+  color: #ff4d4d !important;
 }
 
 .weather-footer {
   text-align: center;
-  font-size: 0.8rem;
-  color: rgba(255, 255, 255, 0.7);
+  margin-top: 50px;
+  padding-bottom: 20px;
+  font-size: 0.9rem;
+  opacity: 0.8;
 }
 
-.weather-footer i {
-  margin-right: 5px;
-}
-
-/* Responsive adjustments */
-@media (max-width: 576px) {
-  .weather-card {
-    padding: 20px;
-  }
-  
+/* --- Responsive Media Queries --- */
+@media (max-width: 768px) {
   .weather-header h1 {
     font-size: 1.8rem;
   }
   
-  .btn-primary {
-    padding: 8px 15px;
+  .weather-card {
+    margin-bottom: 20px; /* Adds space when cards stack on mobile */
   }
-}
-.search-history {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.badge {
-  padding: 8px 15px;
-  font-weight: 400;
-  opacity: 0.8;
-  transition: opacity 0.3s;
-}
-
-.badge:hover {
-  opacity: 1;
-}
-.search-history a:hover {
-  color: #ff4d4d !important; /* Turns red when hovering */
-  transition: color 0.3s ease;
-}
-
-.search-history .badge:hover {
-  background-color: #e0e0e0 !important;
-  transform: translateY(-1px);
-  transition: all 0.2s ease;
 }
