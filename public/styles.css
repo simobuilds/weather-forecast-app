@@ -17,17 +17,28 @@ body {
   min-height: 90vh;
 }
 
+/* --- Modified Section --- */
 .weather-card {
   background: rgba(255, 255, 255, 0.15);
   border-radius: 20px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   padding: 30px;
-  width: 100%;
-  max-width: 500px;
+  
+  /* Use 90% for mobile as default */
+  width: 90%; 
+  max-width: 500px; /* Small limit for mobile/tablets */
+  
   backdrop-filter: blur(10px);
   border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
+/* --- Add this for Desktop (Screens wider than 992px) --- */
+@media (min-width: 992px) {
+  .weather-card {
+    width: 70%; /* Takes up 70% of the screen width */
+    max-width: 1000px; /* Prevents it from becoming absurdly wide on ultra-wide monitors */
+  }
+}
 .weather-header {
   text-align: center;
   margin-bottom: 25px;
