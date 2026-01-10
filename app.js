@@ -21,12 +21,41 @@ app.get("/", function(req, res) {
   res.render("index", { weather: null, query: null, imgUrl: null, history: searchHistory });
 });
 
-// Route: Handle Form Submission (ONLY ONE POST ROUTE)
+let weatherCards = []; // Store full weather data for up to 3 cities
+
 app.post("/", function(req, res) {
   const query = req.body.cityName;
-  const apiKey = process.env.WEATHER_API_KEY; 
+  const apiKey = process.env.WEATHER_API_KEY;
   const url = `https://api.openweathermap.org/data/2.5/weather?q=${query}&appid=${apiKey}&units=metric`;
-  
+
+  https.get(url, function(apiResponse) {
+    let rawData = "";
+    apiResponse.on("data", (chunk) => { rawData += chunk; });
+    apiResponse.on("end", () => {
+      try {
+        const weatherData = JSON.parse(rawData);
+        if (weatherData.cod === 200) {
+          const icon = weatherData.weather[0].icon;
+          const imgUrl = `https://openweathermap.org/img/wn/${icon}@2x.png`;
+          
+          // Create a custom object for this city
+          const newEntry = { data: weatherData, img: imgUrl, name: query };
+
+          // Add to start, remove oldest if more than 3
+          weatherCards.unshift(newEntry);
+          if (weatherCards.length > 3) weatherCards.pop();
+        }
+        res.redirect("/"); // Redirect to GET route to show all cards
+      } catch (e) { res.redirect("/"); }
+    });
+  });
+});
+
+app.get("/", (req, res) => {
+  res.render("index", { cards: weatherCards });
+});
+
+
   https.get(url, function(apiResponse) {
     if (apiResponse.statusCode !== 200) {
       res.render("index", { weather: "error", query: query, imgUrl: null, history: searchHistory });

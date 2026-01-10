@@ -34,10 +34,28 @@ body {
 
 /* --- Add this for Desktop (Screens wider than 992px) --- */
 @media (min-width: 992px) {
-  .weather-card {
-    width: 70%; /* Takes up 70% of the screen width */
-    max-width: 1000px; /* Prevents it from becoming absurdly wide on ultra-wide monitors */
-  }
+ /* Change your existing .weather-card to this */
+.weather-card {
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 20px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 20px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease;
+  width: 100%; /* Let the column define the width */
+}
+
+.weather-card:hover {
+  transform: translateY(-5px);
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Container for the whole app */
+.weather-app-container {
+  padding: 40px 20px;
+  width: 100%;
+}
 }
 .weather-header {
   text-align: center;
