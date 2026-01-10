@@ -30,6 +30,16 @@
                                                                                                                                                                                         </button>
                                                                                                                                                                                                   </div>
                                                                                                                                                                                                           </form>
+                                                                                                                                                                                                          <% if (history && history.length > 0) { %>
+  <div class="search-history mt-2 mb-4 text-center">
+    <small class="text-white-50">Recent: </small>
+    <% history.forEach(city => { %>
+      <span class="badge rounded-pill bg-light text-dark mx-1" style="cursor: pointer;" onclick="document.getElementById('cityInput').value='<%= city %>';">
+        <%= city %>
+      </span>
+    <% }) %>
+  </div>
+<% } %>
                                                                                                                                                                                                                   
                                                                                                                                                                                                                           <div class="weather-display">
   <% if (weather === null) { %>

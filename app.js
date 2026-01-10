@@ -51,7 +51,32 @@ app.post("/", function(req, res) {
     res.render("index", { weather: "error", query: query, imgUrl: null });
   });
 });
+let searchHistory = []; // Array to store last 3 cities
 
+app.post("/", function(req, res) {
+    const query = req.body.cityName;
+    
+    // ... your existing API fetching code ...
+
+    apiResponse.on("end", () => {
+        try {
+            const weatherData = JSON.parse(rawData);
+            
+            // Success! Add city to history if not already there
+            if (!searchHistory.includes(query)) {
+                searchHistory.unshift(query); // Add to beginning
+                if (searchHistory.length > 3) searchHistory.pop(); // Keep only 3
+            }
+
+            res.render("index", { 
+                weather: weatherData, 
+                query: query, 
+                imgUrl: imgUrl,
+                history: searchHistory // Pass history to the page
+            });
+        } catch (error) { /* ... handle error ... */ }
+    });
+});
 // Port Logic for Local Testing
 if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 3000;
