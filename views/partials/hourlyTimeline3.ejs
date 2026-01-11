@@ -1,0 +1,37 @@
+<% if (typeof hourlyCards !== 'undefined' && hourlyCards.length > 0) { %>
+<div class="container mt-5">
+    <div class="d-flex align-items-center mb-4">
+        <h3 class="text-white mb-0"><i class="fas fa-history me-2"></i> Hourly Timeline</h3>
+        <span class="badge bg-primary ms-3">Next 24 Hours</span>
+    </div>
+
+    <% hourlyCards.forEach(card => { %>
+        <div class="weather-card p-0 mb-5 shadow-lg" style="background: rgba(255, 255, 255, 0.1); border-radius: 20px; overflow: hidden;">
+            <div class="p-3 bg-dark bg-opacity-25 d-flex justify-content-between align-items-center">
+                <h4 class="m-0 notranslate"><i class="fas fa-map-marker-alt text-danger me-2"></i><%= card.name %></h4>
+                <small class="text-white-50">Local Hourly Update</small>
+            </div>
+            
+            <div class="d-flex overflow-auto p-4 gap-4 hourly-scroll-container">
+                <% card.hours.forEach(hour => { %>
+                    <div class="text-center hourly-item">
+                        <p class="time-label">
+                            <%= new Date(hour.dt * 1000).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) %>
+                        </p>
+                        <div class="icon-wrapper">
+                            <img src="https://openweathermap.org/img/wn/<%= hour.weather[0].icon %>@2x.png" alt="weather icon">
+                        </div>
+                        <p class="temp-label"><%= Math.round(hour.main.temp) %>°</p>
+                        <p class="desc-label text-capitalize"><%= hour.weather[0].description %></p>
+                        
+                        <div class="rain-chance mt-2">
+                            <i class="fas fa-umbrella text-info"></i>
+                            <span><%= (hour.pop * 100).toFixed(0) %>%</span>
+                        </div>
+                    </div>
+                <% }) %>
+            </div>
+        </div>
+    <% }) %>
+</div>
+<% } %>

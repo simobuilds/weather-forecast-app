@@ -126,3 +126,122 @@ body {
     margin-bottom: 20px; /* Adds space when cards stack on mobile */
   }
 }
+.hourly-scroll-container {
+    min-height: 150px; /* Ensure it doesn't collapse to 0px */
+    display: flex !important; 
+    visibility: visible !important;
+}
+
+
+  
+    .hourly-scroll-container {
+        scrollbar-width: auto;
+    scrollbar-color: #ffc107 rgba(255, 255, 255, 0.1);
+    display: flex !important;
+    overflow-x: auto !important;
+    white-space: nowrap !important;
+    padding: 20px;
+    gap: 15px;
+}
+
+
+/* Chrome, Edge, and Safari scrollbar */
+.hourly-scroll-container::-webkit-scrollbar {
+    height: 8px;
+}
+.hourly-scroll-container::-webkit-scrollbar-thumb {
+    background: #ffc107;
+    border-radius: 10px;
+}
+
+
+.hourly-item {
+    flex: 0 0 140px; /* Slightly wider to prevent text wrapping too much */
+    background: rgba(255, 255, 255, 0.08);
+    padding: 18px 12px;
+    border-radius: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.desc-label {
+    /* Ensures the description is always visible and clear */
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    word-wrap: break-word;
+    text-align: center;
+}
+
+.extra-details span {
+    display: inline-block;
+}
+.hourly-item:hover {
+    transform: translateY(-5px);
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.time-label { font-size: 0.85rem; color: rgba(255,255,255,0.7); margin-bottom: 5px; }
+.temp-label { font-size: 1.25rem; font-weight: 600; margin: 0; }
+.desc-label { font-size: 0.7rem; color: #ffc107; margin: 0; }
+.rain-chance { font-size: 0.75rem; color: #0dcaf0; }
+
+.icon-wrapper img {
+    width: 60px;
+    filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
+}
+/* Container for the horizontal scroll */
+
+/* Individual hour item */
+
+
+
+/* Custom Scrollbar for a cleaner look */
+.hourly-scroll-container::-webkit-scrollbar {
+    height: 8px;
+}
+.hourly-scroll-container::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+}
+.hourly-scroll-container::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.share-buttons .btn {
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    padding: 0;
+    transition: all 0.3s ease;
+}
+
+.share-buttons .btn:hover {
+    transform: scale(1.1);
+}
+
+.share-buttons .btn-outline-info {
+    color: #020d13;
+    border-color: #ecedee;
+}
+
+.share-buttons .btn-outline-primary {
+    color: #4267B2;
+    border-color: #4267B2;
+}
+/* Highlight the first item (current hour) */
+.hourly-scroll-container .hourly-item:first-child {
+    border: 1px solid #ffc107;
+    background: rgba(255, 193, 7, 0.1);
+}
+
+/* Add a smooth fade effect to the edges of the scroll container */
+.hourly-scroll-container {
+    mask-image: linear-gradient(to right, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+}
