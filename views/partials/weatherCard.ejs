@@ -1,0 +1,46 @@
+<div class="col-12 col-md-4">
+    <div class="weather-card shadow-sm">
+        <div class="text-center">
+            <h4 class="text-capitalize notranslate"><%= city.name %></h4>
+            <img src="<%= city.img %>" alt="weather icon">
+            <h2 class="display-6"><%= Math.round(city.data.main.temp) %>°C</h2>
+            <p class="text-white-50">
+                <span id="desc-<%= city.name.replace(/\s+/g, '') %>">
+                    <%= city.data.weather[0].description %>
+                </span>
+           
+            </p>
+            <hr>
+            <div class="row small">
+                <div class="col"><strong>Hum:</strong><br><%= city.data.main.humidity %>%</div>
+                <div class="col"><strong>Wind:</strong><br><%= city.data.wind.speed %>m/s</div>
+            </div>
+        </div>
+       
+        <div class="share-buttons mt-3 pt-2 border-top border-secondary border-opacity-25">
+           
+    <small class="text-white-50 d-block mb-2">Share this weather:</small>
+    <div class="d-flex justify-content-center gap-2">
+        <a href="#" 
+           onclick="shareTwitter('<%= city.name %>', '<%= Math.round(city.data.main.temp) %>')" 
+           class="btn btn-sm btn-outline-info" 
+           title="Share on X">
+            <i class="fab fa-x-twitter"></i>
+        </a>
+
+        <a href="#" 
+           onclick="shareFacebook()" 
+           class="btn btn-sm btn-outline-primary" 
+           title="Share on Facebook">
+            <i class="fab fa-facebook-f"></i>
+        </a>
+        
+    </div>
+    
+</div>
+<a href="/visualize/<%= city.name %>" class="btn btn-sm btn-info w-100 mt-2">
+    <i class="fas fa-chart-line"></i> View Wind Analytics
+</a>
+ 
+    </div>
+</div>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Weather Analysis - <%= city %></title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        body { background: #121212; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .line { fill: none; stroke: #0dcaf0; stroke-width: 3; }
+        .area { fill: rgba(13, 202, 240, 0.1); }
+        .axis-label text { fill: #aaa; font-size: 11px; }
+        /* Date Highlight */
+        .day-label { fill: #ff4d4d !important; font-weight: bold; font-size: 12px; }
+        .domain, .tick line { stroke: rgba(255,255,255,0.1); }
+        .chart-title { font-weight: 300; letter-spacing: 1px; }
+        
+        /* Tooltip Styles */
+        .tooltip-box {
+            position: absolute;
+            padding: 10px;
+            background: rgba(0, 0, 0, 0.9);
+            border: 1px solid #444;
+            border-radius: 6px;
+            color: white;
+            font-size: 12px;
+            pointer-events: none;
+            z-index: 1000;
+            display: none;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+        }
+        .focus-line { stroke: rgba(255, 255, 255, 0.3); stroke-dasharray: 3,3; }
+        .focus-circle { stroke-width: 2px; fill: #121212; }
+        .overlay { fill: none; pointer-events: all; }
+    </style>
+</head>
+<body>
+
+<div class="container mt-5 mb-5">
+    <div class="d-flex justify-content-between align-items-center mb-5">
+        <a href="/" class="btn btn-outline-light btn-sm"><i class="fas fa-arrow-left"></i> Back to Dashboard</a>
+        <h1 class="chart-title m-0">Weather Analysis: <%= city %></h1>
+        <div style="width: 140px;"></div> </div>
+
+    <div class="d-flex justify-content-between align-items-end mb-2 px-1">
+        <h3 class="text-info m-0"><i class="fas fa-wind me-2"></i>Wind Speed (m/s)</h3>
+        <button class="btn btn-sm btn-success" onclick="captureBoard('wind-capture-area', 'Wind')">
+            <i class="fas fa-camera me-1"></i> Save Wind Chart
+        </button>
+    </div>
+    <div id="wind-capture-area" class="p-4 rounded shadow mb-5" style="background: #1a1a1a; border: 1px solid #333;">
+        <div id="wind-chart"></div>
+        <div class="mt-3 text-white-50 small border-top border-secondary pt-2">
+            Generated on <%= new Date().toLocaleDateString() %> | Weather Insights Pro
+        </div>
+    </div>
+
+    <div class="d-flex justify-content-between align-items-end mb-2 px-1">
+        <h3 class="text-primary m-0"><i class="fas fa-tint me-2"></i>Humidity Levels (%)</h3>
+        <button class="btn btn-sm btn-success" onclick="captureBoard('humidity-capture-area', 'Humidity')">
+            <i class="fas fa-camera me-1"></i> Save Humidity Chart
+        </button>
+    </div>
+    <div id="humidity-capture-area" class="p-4 rounded shadow mb-5" style="background: #1a1a1a; border: 1px solid #333;">
+        <div id="humidity-chart"></div>
+        <div class="mt-3 text-white-50 small border-top border-secondary pt-2">
+            Generated on <%= new Date().toLocaleDateString() %> | Weather Insights Pro
+        </div>
+    </div>
+</div>
+
+<div class="tooltip-box"></div>
+
+<script>
+    // 1. DATA PREP
+    const data = <%- hourlyData %>;
+    const tooltip = d3.select(".tooltip-box");
+    const bisectDate = d3.bisector(d => new Date(d.dt * 1000)).left;
+
+    function initCharts() {
+        const containerWidth = document.querySelector('.container').offsetWidth;
+        const margin = {top: 20, right: 30, bottom: 70, left: 60};
+        const width = containerWidth - margin.left - margin.right ;
+        const height = 300 - margin.top - margin.bottom;
+
+        // Shared X Scale
+        const x = d3.scaleTime()
+            .domain(d3.extent(data, d => new Date(d.dt * 1000)))
+            .range([0, width]);
+
+        // --- RENDER WIND CHART ---
+        const svgWind = createSVG("#wind-chart", width, height, margin);
+        const yWind = d3.scaleLinear()
+            .domain([0, d3.max(data, d => d.wind.speed) + 2])
+            .range([height, 0]);
+
+        renderXAxis(svgWind, x, height);
+        svgWind.append("g").call(d3.axisLeft(yWind)).attr("class", "axis-label");
+
+        const windLine = d3.line()
+            .x(d => x(new Date(d.dt * 1000)))
+            .y(d => yWind(d.wind.speed))
+            .curve(d3.curveMonotoneX);
+
+        svgWind.append("path").datum(data).attr("class", "line").attr("d", windLine);
+        addInteractivity(svgWind, x, yWind, 'wind', ' m/s', width, height, '#0dcaf0');
+
+        // --- RENDER HUMIDITY CHART ---
+        const svgHum = createSVG("#humidity-chart", width, height, margin);
+        const yHum = d3.scaleLinear().domain([0, 100]).range([height, 0]);
+
+        renderXAxis(svgHum, x, height);
+        svgHum.append("g").call(d3.axisLeft(yHum).tickFormat(d => d + "%")).attr("class", "axis-label");
+
+        const humArea = d3.area()
+            .x(d => x(new Date(d.dt * 1000)))
+            .y0(height)
+            .y1(d => yHum(d.humidity))
+            .curve(d3.curveStepAfter);
+
+        svgHum.append("path").datum(data).attr("fill", "rgba(0, 123, 255, 0.2)").attr("stroke", "#007bff").attr("stroke-width", 2).attr("d", humArea);
+        addInteractivity(svgHum, x, yHum, 'humidity', '%', width, height, '#007bff');
+    }
+
+    // HELPER: Create SVG Container
+    function createSVG(selector, w, h, m) {
+        return d3.select(selector)
+            .append("svg")
+            .attr("width", w + m.left + m.right)
+            .attr("height", h + m.top + m.bottom)
+            .append("g")
+            .attr("transform", `translate(${m.left},${m.top})`);
+    }
+
+    // HELPER: X-Axis with 12h Format & Red Dates
+    function renderXAxis(svg, x, h) {
+        const xAxis = svg.append("g")
+            .attr("transform", `translate(0,${h})`)
+            .attr("class", "axis-label")
+            .call(d3.axisBottom(x)
+                .ticks(d3.timeHour.every(3))
+                .tickFormat(d => {
+                    if (d3.timeDay(d) >= d) {
+                        return d3.timeFormat("%a %d")(d);
+                    } else {
+                        let timeStr = d3.timeFormat("%I %p")(d).toLowerCase();
+                        return timeStr.startsWith("0") ? timeStr.substring(1) : timeStr;
+                    }
+                })
+            );
+
+        xAxis.selectAll("text")
+            .style("text-anchor", "end")
+            .attr("dx", "-.8em")
+            .attr("dy", ".15em")
+            .attr("transform", "rotate(-35)")
+            .each(function(d) {
+                if (d3.timeDay(d) >= d) d3.select(this).attr("class", "day-label");
+            });
+    }
+
+    // HELPER: Interactive Dots and Tooltip
+    function addInteractivity(svg, x, yScale, dataKey, unit, w, h, color) {
+        const focus = svg.append("g").style("display", "none");
+        focus.append("line").attr("class", "focus-line").attr("y1", 0).attr("y2", h);
+        focus.append("circle").attr("class", "focus-circle").attr("r", 5).attr("stroke", color);
+
+        svg.append("rect")
+            .attr("class", "overlay")
+            .attr("width", w)
+            .attr("height", h)
+            .on("mouseover", () => { focus.style("display", null); tooltip.style("display", "block"); })
+            .on("mouseout", () => { focus.style("display", "none"); tooltip.style("display", "none"); })
+            .on("mousemove", (event) => {
+                const x0 = x.invert(d3.pointer(event)[0]);
+                const i = bisectDate(data, x0, 1);
+                const d = (x0 - new Date(data[i-1].dt * 1000) > new Date(data[i].dt * 1000) - x0) ? data[i] : data[i-1];
+                
+                const xPos = x(new Date(d.dt * 1000));
+                const val = dataKey === 'wind' ? d.wind.speed : d.humidity;
+                const yPos = yScale(val);
+
+                focus.select(".focus-line").attr("transform", `translate(${xPos},0)`);
+                focus.select(".focus-circle").attr("transform", `translate(${xPos},${yPos})`);
+
+                const timeFormatted = new Date(d.dt * 1000).toLocaleTimeString([], {hour:'numeric', minute:'2-digit', hour12:true}).toLowerCase().replace(/^0/, '');
+                
+                tooltip.html(`<strong>${timeFormatted}</strong><br/>${dataKey.charAt(0).toUpperCase() + dataKey.slice(1)}: ${Math.round(val)}${unit}`)
+                    .style("left", (event.pageX + 15) + "px")
+                    .style("top", (event.pageY - 28) + "px");
+            });
+    }
+
+    // 2. CAPTURE FUNCTION
+    async function captureBoard(elementId, type) {
+        const element = document.getElementById(elementId);
+        const btn = event.currentTarget;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Saving...';
+        btn.disabled = true;
+
+        try {
+            const canvas = await html2canvas(element, { backgroundColor: "#1a1a1a", scale: 2, useCORS: true });
+            const link = document.createElement('a');
+            link.download = `${type}-Analysis-<%= city %>.png`;
+            link.href = canvas.toDataURL("image/png");
+            link.click();
+        } catch (err) { console.error(err); } 
+        finally { btn.innerHTML = originalText; btn.disabled = false; }
+    }
+
+    // Initialize
+    window.onload = initCharts;
+</script>
+
+</body>
+</html>
